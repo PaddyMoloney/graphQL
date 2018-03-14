@@ -10,7 +10,7 @@ const{
 
 const CompanyType = new GraphQLObjectType({
 name:'Company',
-fields:{
+fields: () => ({
   id: { type: GraphQLString },
   name: { type: GraphQLString },
   description: { type: GraphQLString },
@@ -21,13 +21,13 @@ fields:{
       .then(res => res.data)
     }
   }
-}
+}) // "()=> ({})" closur scope make the programe run everything so it will know what the user type is 
 
 });
 
 const UserType = new GraphQLObjectType({
 name: 'User',
-fields: {
+fields: () => ({
   id: { type: GraphQLString },
   firstName: { type: GraphQLString },
   age: { type: GraphQLInt  },
@@ -38,7 +38,7 @@ fields: {
     .then(res => res.data);
 }
 }
-}
+})
 });
 
 const RootQuery = new GraphQLObjectType({
