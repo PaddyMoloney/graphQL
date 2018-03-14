@@ -5,7 +5,8 @@ const{
   GraphQLString,
   GraphQLInt,
   GraphQLSchema,
-  GraphQLList
+  GraphQLList,
+  GraphQLNonNull // GraphQLNonNull thing can't be empty
 } = graphql;
 
 const CompanyType = new GraphQLObjectType({
@@ -21,7 +22,7 @@ fields: () => ({
       .then(res => res.data)
     }
   }
-}) // "()=> ({})" closur scope make the programe run everything so it will know what the user type is 
+}) // "()=> ({})" closur scope make the programe run everything so it will know what the user type is
 
 });
 
@@ -64,6 +65,27 @@ const RootQuery = new GraphQLObjectType({
   }
 });
 
+//root mutation for adding a new user?
+
+const mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields:{
+    addUser:{
+      type: UserType,
+      args: {
+        firstName: {type: new GraphQLNonNull(GraphQLString)},
+        age: { type: new GraphQLNonNull(GraphQLInt) },
+        comapanyId: { type: GraphQLString }
+      },
+      resolve(parentValue, {firstName, age }) {
+        return axios.post('http://localhost:3000/users/',{firstName, age })
+        .then(res => res.data);
+      }
+    }
+  }
+});
+
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation
 });
